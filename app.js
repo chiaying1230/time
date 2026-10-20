@@ -5,7 +5,7 @@
   'use strict';
 
   // ---------------------------------------------------------------- 設定
-  var APP_VERSION = '2.0.0';
+  var APP_VERSION = '2.0.1';
   var PLAN_MS = 20 * 60 * 1000;
   var B_LABEL = '非作業用途拿起並使用手機';
   var OTHER = '其他';
@@ -389,7 +389,7 @@
     $app.innerHTML =
       '<section class="home">' +
         '<div class="home__hero">' +
-          '<img class="home__icon" src="/icons/icon-192.png" alt="">' +
+          '<img class="home__icon" src="icons/icon-192.png" alt="">' +
           '<h1>作業觀察筆記</h1>' +
           '<p class="home__lead">觀察寫作業期間「非作業用途拿起並使用手機」，以 ABC 直接紀錄。每次固定 20 分鐘。</p>' +
           (showTip ? '<div class="tip" id="line-tip"><p>建議使用 Chrome / Safari 開啟並加入主畫面，使用會更穩定。</p>' +
@@ -1076,7 +1076,7 @@
       location.reload();
     });
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/sw.js').then(function (reg) {
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
         swReg = reg;
         function markReady() { updateReady = true; showUpdateBarIfReady(); }
         if (reg.waiting && navigator.serviceWorker.controller) markReady();

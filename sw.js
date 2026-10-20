@@ -4,25 +4,27 @@
  * - 沒網路／太慢：用最近一次成功載入的版本 → 可離線觀察。
  * 每次部署請把 VERSION 加一，瀏覽器會偵測到新 SW 並在 App 內提示更新。
  */
-var VERSION = 'v2.0.0';
+var VERSION = 'v2.0.1';
 var CACHE = 'hwobs-' + VERSION;
 var ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.webmanifest',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/icon-maskable-512.png',
-  '/icons/apple-touch-icon.png',
-  '/icons/favicon-32.png'
+  './',
+  'index.html',
+  'style.css',
+  'app.js',
+  'manifest.webmanifest',
+  'icons/icon-192.png',
+  'icons/icon-512.png',
+  'icons/icon-maskable-512.png',
+  'icons/apple-touch-icon.png',
+  'icons/favicon-32.png'
 ];
+// 路徑都相對於 sw.js 所在位置，網站放在根目錄（Netlify）或子目錄（GitHub Pages /time/）都可用
+var INDEX_URL = new URL('index.html', self.location).href;
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      return cache.addAll(ASSETS.map(function (u) { return new Request(u, { cache: 'reload' }); }));
+      return cache.addAll(ASSETS.map(function (u) { return new Request(new URL(u, self.location).href, { cache: 'reload' }); }));
     })
   );
   // 不自動 skipWaiting：由使用者在 App 內按「重新整理」決定，避免打斷進行中的觀察
@@ -67,8 +69,8 @@ self.addEventListener('fetch', function (event) {
   if (url.origin !== self.location.origin) return;
   if (req.mode === 'navigate') {
     // 所有頁面都是同一個 index.html（hash 路由）
-    event.respondWith(networkFirst(req, '/index.html', 4000));
+    event.respondWith(networkFirst(req, INDEX_URL, 4000));
     return;
   }
-  event.respondWith(networkFirst(req, url.pathname, 6000));
+  event.respondWith(networkFirst(req, url.origin + url.pathname, 6000));
 });
